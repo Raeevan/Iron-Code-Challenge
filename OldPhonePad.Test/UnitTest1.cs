@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestPlatform.TestHost;
+
 namespace OldPhonePad.Test
 {
     public class ProgramTest
