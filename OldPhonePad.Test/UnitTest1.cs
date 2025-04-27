@@ -8,8 +8,8 @@ namespace OldPhonePad.Test
         public void OldPhonePad_ShouldReturnCorrectMessage_ForValidInput()
         {
             // Arrange
-            var input = "222#";
-            var expectedOutput = "C";
+            var input = "33#";
+            var expectedOutput = "E";
 
             // Act
             var actualOutput = Program.OldPhonePad(input);
@@ -33,11 +33,11 @@ namespace OldPhonePad.Test
         }
 
         [Fact]
-        public void OldPhonePad_ShouldHandleBackspaceCorrectly()
+        public void OldPhonePad_ShouldHandleSpaceCorrectly()
         {
             // Arrange
-            var input = "22*2#";
-            var expectedOutput = "A";
+            var input = "4433555 555666#";
+            var expectedOutput = "HELLO";
 
             // Act
             var actualOutput = Program.OldPhonePad(input);
@@ -47,11 +47,11 @@ namespace OldPhonePad.Test
         }
 
         [Fact]
-        public void OldPhonePad_ShouldHandleSpaceCorrectly()
+        public void OldPhonePad_ShouldHandlBackSpaceCorrectly()
         {
             // Arrange
-            var input = "2202#";
-            var expectedOutput = "B A";
+            var input = "227*#";
+            var expectedOutput = "B";
 
             // Act
             var actualOutput = Program.OldPhonePad(input);
