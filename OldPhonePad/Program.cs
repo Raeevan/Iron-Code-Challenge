@@ -4,99 +4,83 @@ namespace OldPhonePad
 {
     public class Program
     {
+        private static readonly Dictionary<char, string> KeypadMapping = new()
+        {
+            ['0'] = " ",
+            ['1'] = "&'()*,-./1",
+            ['2'] = "ABC2",
+            ['3'] = "DEF3",
+            ['4'] = "GHI4",
+            ['5'] = "JKL5",
+            ['6'] = "MNO6",
+            ['7'] = "PQRS7",
+            ['8'] = "TUV8",
+            ['9'] = "WXYZ9"
+        };
+
         public static string OldPhonePad(string input)
         {
-            // Check if input is valid
-            if (input == null || input == "")
+            if (string.IsNullOrWhiteSpace(input))
                 return "Please enter a message to send";
-            if (!input.EndsWith("#"))
-            {
-                return "Please end your message with a \"#\" to send";
-            }
 
-            // I create a dictionary for the keypad mapping
-            var keys = new Dictionary<char, string>
-        {
-            {'0', " "},
-            {'1', "&'()*,-./1"},
-            {'2', "ABC2"},
-            {'3', "DEF3"},
-            {'4', "GHI4"},
-            {'5', "JKL5"},
-            {'6', "MNO6"},
-            {'7', "PQRS7"},
-            {'8', "TUV8"},
-            {'9', "WXYZ9"}
-        };
+            if (!input.EndsWith("#"))
+                return "Please end your message with a \"#\" to send";
 
             var result = new StringBuilder();
             char lastDigit = '\0';
             int consecutivePresses = 0;
 
-            // Process each character in the input, excluding the final '#'
-            for (int i = 0; i < input.Length - 1; i++)
+            foreach (var currentInput in input[..^1]) // Exclude the final '#'
             {
-                char currentInput = input[i];
-
-                // Handle backspace
-                if (currentInput == '*')
+                switch (currentInput)
                 {
-                    if (result.Length > 0)
-                    {
-                        result.Remove(result.Length - 1, 1);
-                    }
-                    lastDigit = '\0';
-                    consecutivePresses = 0;
-                    continue;
-                }
+                    case '*': // Handle backspace
+                        if (result.Length > 0)
+                            result.Remove(result.Length - 1, 1);
+                        ResetState(ref lastDigit, ref consecutivePresses);
+                        break;
 
-                // Handle space (pause) - reset consecutive press counter
-                if (currentInput == ' ')
-                {
-                    lastDigit = '\0';
-                    consecutivePresses = 0;
-                    continue;
-                }
+                    case ' ': // Handle space (pause)
+                        ResetState(ref lastDigit, ref consecutivePresses);
+                        break;
 
-                // Reset counter if we're pressing a different digit
-                if (currentInput != lastDigit)
-                {
-                    lastDigit = currentInput;
-                    consecutivePresses = 1;
-                }
-                else
-                {
-                    consecutivePresses++;
-                }
+                    default:
+                        if (!KeypadMapping.ContainsKey(currentInput))
+                            continue;
 
-                // Skip if not a valid keypad digit
-                if (!keys.ContainsKey(currentInput))
-                {
-                    continue;
+                        if (currentInput != lastDigit)
+                        {
+                            lastDigit = currentInput;
+                            consecutivePresses = 1;
+                        }
+                        else
+                        {
+                            consecutivePresses++;
+                        }
+
+                        var possibleChars = KeypadMapping[currentInput];
+                        if (consecutivePresses > 1)
+                            result.Remove(result.Length - 1, 1); // Remove previous output
+
+                        var charIndex = (consecutivePresses - 1) % possibleChars.Length;
+                        result.Append(possibleChars[charIndex]);
+                        break;
                 }
-
-                string possibleChars = keys[currentInput];
-
-                // If this is a consecutive press of the same digit, remove the previous output
-                if (consecutivePresses > 1 && lastDigit == currentInput)
-                {
-                    result.Remove(result.Length - 1, 1);
-                }
-
-                // Calculate which character to output
-                int charIndex = (consecutivePresses - 1) % possibleChars.Length;
-                result.Append(possibleChars[charIndex]);
             }
 
             return result.ToString();
         }
 
+        private static void ResetState(ref char lastDigit, ref int consecutivePresses)
+        {
+            lastDigit = '\0';
+            consecutivePresses = 0;
+        }
 
         static void Main(string[] args)
         {
-            Console.WriteLine("enter a number");
+            Console.WriteLine("Enter a number:");
             string userInput = Console.ReadLine();
-
             Console.WriteLine(OldPhonePad(userInput));
         }
     }
