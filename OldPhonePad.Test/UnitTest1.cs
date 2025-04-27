@@ -5,7 +5,7 @@ namespace OldPhonePad.Test
     public class ProgramTest
     {
         [Fact]
-        public void OldPhonePad_ShouldReturnCorrectMessage_ForValidInput()
+        public void OldPhonePad_ShouldReturnCorrectMessage()
         {
             // Arrange
             var input = "33#";
@@ -52,6 +52,20 @@ namespace OldPhonePad.Test
             // Arrange
             var input = "227*#";
             var expectedOutput = "B";
+
+            // Act
+            var actualOutput = Program.OldPhonePad(input);
+
+            // Assert
+            Assert.Equal(expectedOutput, actualOutput);
+        }
+
+        [Fact]
+        public void OldPhonePad_ShouldHandleCorrectly()
+        {
+            // Arrange
+            var input = "8 88777444666*664#";
+            var expectedOutput = "TURING";
 
             // Act
             var actualOutput = Program.OldPhonePad(input);
