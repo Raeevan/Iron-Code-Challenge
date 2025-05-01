@@ -4,6 +4,7 @@ namespace OldPhonePad
 {
     public class Program
     {
+        #region -- Dictionary --
         private static readonly Dictionary<char, string> KeypadMapping = new()
         {
             ['0'] = " ",
@@ -17,7 +18,8 @@ namespace OldPhonePad
             ['8'] = "TUV8",
             ['9'] = "WXYZ9"
         };
-
+        #endregion
+        #region -- OldPhonePad --
         public static string OldPhonePad(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -70,7 +72,7 @@ namespace OldPhonePad
 
             return result.ToString();
         }
-
+        #endregion
         private static void ResetState(ref char lastDigit, ref int consecutivePresses)
         {
             lastDigit = '\0';
