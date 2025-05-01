@@ -72,13 +72,13 @@ namespace OldPhonePad
 
             return result.ToString();
         }
-        #endregion
+        
         private static void ResetState(ref char lastDigit, ref int consecutivePresses)
         {
             lastDigit = '\0';
             consecutivePresses = 0;
         }
-
+        #endregion
         static void Main(string[] args)
         {
             Console.WriteLine("Enter a number:");
